@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">androidchat</string>
+    <string name="app_name">My chat</string>
+    <string name="input_email">Enter your e-mail</string>
+    <string name="input_pass">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
