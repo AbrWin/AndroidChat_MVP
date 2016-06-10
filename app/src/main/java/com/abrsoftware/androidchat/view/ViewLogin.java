@@ -7,11 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.abrsoftware.androidchat.R;
+import com.abrsoftware.androidchat.domain.useCases.LoginView;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
-public class ViewLogin extends Fragment {
+public class ViewLogin extends Fragment implements LoginView{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -22,6 +27,16 @@ public class ViewLogin extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    @Bind(R.id.btnLogin)
+    public Button btnLogin;
+    @Bind(R.id.btnRegister)
+    public Button btnRegister;
+    @Bind(R.id.inputMail)
+    public Button inputMail;
+    @Bind(R.id.inputPass)
+    public Button inputPass;
+
 
     public ViewLogin() {
     }
@@ -48,6 +63,7 @@ public class ViewLogin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootview = (ViewGroup)inflater.inflate(R.layout.layout_login, container, false);
+        ButterKnife.bind(rootview);
         return rootview;
     }
 
@@ -74,6 +90,57 @@ public class ViewLogin extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void enableInputs() {
+
+    }
+
+    @Override
+    public void disableInputs() {
+
+    }
+
+    @Override
+    public void showProgresBar() {
+
+    }
+
+    @Override
+    public void hiddenProgresBar() {
+
+    }
+
+    @Override
+    public void handSingOut() {
+
+    }
+
+    @Override
+    public void handSingI() {
+
+    }
+
+    @Override
+    public void navigateToMainScreen() {
+
+    }
+
+    @Override
+    public void loginError(String error) {
+
+    }
+
+    @Override
+    public void newUserSucces() {
+
+    }
+
+    @Override
+    public void newUserError() {
+
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
