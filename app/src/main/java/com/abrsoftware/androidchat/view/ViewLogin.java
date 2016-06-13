@@ -1,24 +1,36 @@
 package com.abrsoftware.androidchat.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.abrsoftware.androidchat.R;
+import com.abrsoftware.androidchat.contactlist.ContactListActivity;
+import com.abrsoftware.androidchat.domain.implementation.LoginPresenterImpl;
+import com.abrsoftware.androidchat.domain.useCases.LoginPresenter;
 import com.abrsoftware.androidchat.domain.useCases.LoginView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class ViewLogin extends Fragment implements LoginView{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -29,41 +41,39 @@ public class ViewLogin extends Fragment implements LoginView{
     private OnFragmentInteractionListener mListener;
 
     @Bind(R.id.btnLogin)
-    public Button btnLogin;
-    @Bind(R.id.btnRegister)
-    public Button btnRegister;
-    @Bind(R.id.inputMail)
-    public Button inputMail;
-    @Bind(R.id.inputPass)
-    public Button inputPass;
+    public CardView btnLogin;
 
+    @Bind(R.id.btnRegister)
+    public CardView btnRegister;
+
+    @Bind(R.id.inputMail)
+    public EditText inputMail;
+
+    @Bind(R.id.inputPass)
+    public EditText inputPassword;
+
+    @Bind(R.id.progressBar)
+    public ProgressBar progressBar;
+
+    private LoginPresenter presenter;
 
     public ViewLogin() {
     }
 
-    public static ViewLogin newInstance(String param1, String param2) {
-        ViewLogin fragment = new ViewLogin();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        ButterKnife.bind(getActivity());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootview = (ViewGroup)inflater.inflate(R.layout.layout_login, container, false);
-        ButterKnife.bind(rootview);
+        View rootview = inflater.inflate(R.layout.layout_login, container, false);
+        ButterKnife.bind(this, rootview);
+        presenter = new LoginPresenterImpl(this);
+        presenter.checkForAuthenticateUser();
         return rootview;
     }
 
@@ -93,56 +103,81 @@ public class ViewLogin extends Fragment implements LoginView{
 
     @Override
     public void enableInputs() {
-
+        setInputs(true);
     }
 
     @Override
     public void disableInputs() {
-
+        setInputs(false);
     }
 
     @Override
     public void showProgresBar() {
-
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hiddenProgresBar() {
-
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
-    public void handSingOut() {
+    public void handleSingOut() {
 
     }
 
+    @OnClick(R.id.btnLogin)
     @Override
-    public void handSingI() {
+    public void handleSingIn() {
+        presenter.validateLogin(inputMail.getText().toString(), inputPassword.getText().toString());
+    }
 
+
+    @Override
+    @OnClick(R.id.btnRegister)
+    public void handleSingUp() {
+        Log.d("msj","hola");
+        presenter.registerNewUser(inputMail.getText().toString(), inputPassword.getText().toString());
+    }
+
+
+    public void hello(){
+        Log.d("msj","hola");
     }
 
     @Override
     public void navigateToMainScreen() {
-
+        startActivity(new Intent(getActivity(), ContactListActivity.class));
     }
 
     @Override
     public void loginError(String error) {
-
+        inputPassword.setText("");
+        String msjError = String.format(getString(R.string.login_error_messagge_singin), error);
+        inputPassword.setError(msjError);
     }
 
     @Override
     public void newUserSucces() {
-
+        Snackbar.make(getView(), R.string.login_notice_messagge_singup, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
-    public void newUserError() {
+    public void newUserError(String error) {
+        inputPassword.setText("");
+        String msjError = String.format(getString(R.string.login_error_messagge_singup), error);
+        inputPassword.setError(msjError);
+    }
+
+    private void setInputs(boolean enable){
+        inputMail.setEnabled(enable);
+        inputPassword.setEnabled(enable);
+        btnLogin.setEnabled(enable);
+        btnRegister.setEnabled(enable);
 
     }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
