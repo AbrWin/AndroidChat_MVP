@@ -9,13 +9,15 @@ public interface LoginView {
     void showProgresBar();
     void hiddenProgresBar();
 
-    void handSingOut();
-    void handSingI();
+    void handleSingOut();
+    void handleSingIn();
+    void handleSingUp();
+
 
     void navigateToMainScreen();
     void loginError(String error);
 
     void newUserSucces();
-    void newUserError();
+    void newUserError(String error);
 
 }

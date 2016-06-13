@@ -5,6 +5,6 @@ package com.abrsoftware.androidchat.domain.useCases;
  */
 public interface LoginInteractor {
     void checkSesion();
+    void doSignIn(String mail, String password);
     void doSignUp(String mail, String password);
-    void doSignOut(String mail, String password);
 }

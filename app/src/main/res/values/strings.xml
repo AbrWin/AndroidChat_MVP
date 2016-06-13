@@ -4,6 +4,9 @@
     <string name="input_pass">Enter your password</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="login.error.messagge.singin">Imposible iniciar sesión %s</string>
+    <string name="login.error.messagge.singup">Imposible registrar nuevo usuario %s</string>
+    <string name="login.notice.messagge.singup">Usuario agregado con éxito </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
