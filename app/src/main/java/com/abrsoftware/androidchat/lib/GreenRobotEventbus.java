@@ -16,22 +16,22 @@ public class GreenRobotEventbus implements Eventbus {
         this.eventBus = EventBus.getDefault();
     }
 
-    private static GreenRobotEventbus getInstance(){
+    public static GreenRobotEventbus getInstance(){
         return SingletonHolder.INSTANCE;
     }
 
     @Override
-    public void register(Object subsciber) {
-
+    public void register(Object subscriber) {
+        eventBus.register(subscriber);
     }
 
     @Override
     public void unregister(Object subscriber) {
-
+        eventBus.unregister(subscriber);
     }
 
     @Override
     public void post(Object event) {
-
+        eventBus.post(event);
     }
 }

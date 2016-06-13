@@ -73,8 +73,21 @@ public class ViewLogin extends Fragment implements LoginView{
         View rootview = inflater.inflate(R.layout.layout_login, container, false);
         ButterKnife.bind(this, rootview);
         presenter = new LoginPresenterImpl(this);
+        presenter.onCreate();
         presenter.checkForAuthenticateUser();
         return rootview;
+    }
+
+    @Override
+    public void onDestroyView() {
+        presenter.onDestroy();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
