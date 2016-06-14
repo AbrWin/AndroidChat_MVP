@@ -75,7 +75,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             case LoginEvent.onSignInError:
                 onSignInError(event.getErrorMessage());
                 break;
-            case LoginEvent.onSignInUpSuccess:
+            case LoginEvent.onSignUpSuccess:
                 onSingUpSeccess();
                 break;
             case LoginEvent.onSignUpError:
@@ -92,7 +92,6 @@ public class LoginPresenterImpl implements LoginPresenter {
             loginView.hiddenProgresBar();
             loginView.enableInputs();
         }
-        Log.d(TAG_NAME, "onFailedRecoverSession");
     }
 
     private void onSingInSeccess(){

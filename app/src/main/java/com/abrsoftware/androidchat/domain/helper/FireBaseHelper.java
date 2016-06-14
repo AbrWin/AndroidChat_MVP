@@ -1,5 +1,6 @@
 package com.abrsoftware.androidchat.domain.helper;
 
+import com.abrsoftware.androidchat.entities.User;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -17,7 +18,7 @@ public class FireBaseHelper {
     private String SEPARATOR = "__";
     private String CHATS_PATH = "chats";
     private String USERS_PATH = "users";
-    private String CONTACTS_PATH = "contacs";
+    private String CONTACTS_PATH = "contacts";
     private String FIREBASE_URL = "https://mychat-abrsoftware.firebaseio.com/";
 
     public static class SingletonHolder{
@@ -50,7 +51,7 @@ public class FireBaseHelper {
         Firebase userReference = null;
         if(mail != null){
             String keyMail = mail.replace(".", "_");
-            userReference = dataReference.getRoot().child(USERS_PATH).child(mail);
+            userReference = dataReference.getRoot().child(USERS_PATH).child(keyMail);
         }
         return userReference;
     }
@@ -89,7 +90,7 @@ public class FireBaseHelper {
     }
 
     public void signOff(){
-        notifyOfConnectionsChange(false, true);
+        notifyOfConnectionsChange(User.OFFLINE, true);
     }
 
     private void notifyOfConnectionsChange(final boolean status, final boolean signOff) {
