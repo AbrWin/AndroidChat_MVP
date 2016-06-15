@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,6 +66,7 @@ public class ViewLogin extends Fragment implements LoginView{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ButterKnife.bind(getActivity());
     }
 
@@ -82,12 +85,6 @@ public class ViewLogin extends Fragment implements LoginView{
     public void onDestroyView() {
         presenter.onDestroy();
         super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -160,7 +157,14 @@ public class ViewLogin extends Fragment implements LoginView{
 
     @Override
     public void navigateToMainScreen() {
-        startActivity(new Intent(getActivity(), ContactListActivity.class));
+        //startActivity(new Intent(getActivity(), ContactListActivity.class));
+        ViewContactList contactList = new ViewContactList(this);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(android.R.id.content, contactList);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 
     @Override

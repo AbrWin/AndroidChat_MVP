@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.abrsoftware.androidchat.R;
+import com.abrsoftware.androidchat.domain.implementation.LoginPresenterImpl;
+import com.abrsoftware.androidchat.domain.useCases.LoginView;
+
+import org.greenrobot.eventbus.Subscribe;
 
 
 public class ViewContactList extends Fragment {
@@ -22,19 +26,19 @@ public class ViewContactList extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private LoginPresenterImpl presenter;
+    private LoginView viewl;
+
+    public ViewContactList(LoginView view) {
+        this.viewl = view;
+        // Required empty public constructor
+    }
 
     public ViewContactList() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewContactList.
-     */
+
     // TODO: Rename and change types and number of parameters
     public static ViewContactList newInstance(String param1, String param2) {
         ViewContactList fragment = new ViewContactList();
@@ -57,7 +61,16 @@ public class ViewContactList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_view_contact_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_contact_list, container, false);
+        presenter = new LoginPresenterImpl(viewl);
+        presenter.onCreate();
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.onDestroy();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -69,8 +82,8 @@ public class ViewContactList extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        /*super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        super.onAttach(context);
+        /*if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
