@@ -150,11 +150,6 @@ public class ViewLogin extends Fragment implements LoginView{
         presenter.registerNewUser(inputMail.getText().toString(), inputPassword.getText().toString());
     }
 
-
-    public void hello(){
-        Log.d("msj","hola");
-    }
-
     @Override
     public void navigateToMainScreen() {
         //startActivity(new Intent(getActivity(), ContactListActivity.class));

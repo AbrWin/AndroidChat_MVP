@@ -25,14 +25,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
-        android:layout_marginTop="130dp"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="HOLA"/>
-
-    <!--<FrameLayout
+    <FrameLayout
         android:layout_marginTop="?attr/actionBarSize"
         android:id="@+id/contactList"
         android:layout_width="match_parent"
@@ -47,6 +40,6 @@
             app:layoutManager="LinearLayoutManager"
             tools:listitem="@layout/item_contact_list" />
 
-    </FrameLayout>-->
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -4,18 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.abrsoftware.androidchat.R;
+import com.abrsoftware.androidchat.adapter.ContactListAdapter;
 import com.abrsoftware.androidchat.domain.implementation.LoginPresenterImpl;
 import com.abrsoftware.androidchat.domain.useCases.LoginView;
+import com.abrsoftware.androidchat.entities.Contact;
 
-import org.greenrobot.eventbus.Subscribe;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class ViewContactList extends Fragment {
+public class ViewContactList extends Fragment implements ContactListAdapter.onItemClickListenerItem {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,10 +32,12 @@ public class ViewContactList extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private LoginPresenterImpl presenter;
-    private LoginView viewl;
+    private LoginView loginPresenter;
+    private RecyclerView recycler;
+    private LinearLayoutManager linearLayoutManager;
 
     public ViewContactList(LoginView view) {
-        this.viewl = view;
+        this.loginPresenter = view;
         // Required empty public constructor
     }
 
@@ -62,8 +69,17 @@ public class ViewContactList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view_contact_list, container, false);
-        presenter = new LoginPresenterImpl(viewl);
+        presenter = new LoginPresenterImpl(loginPresenter);
         presenter.onCreate();
+        Contact contact = new Contact("abr999@hotmail.com","online","");
+        List<Contact> contactList = new ArrayList<>();
+        contactList.add(contact);
+        ContactListAdapter contactListAdapter = new ContactListAdapter(contactList,this);
+        recycler = (RecyclerView) rootView.findViewById(R.id.reciclador);
+        linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recycler.setLayoutManager(linearLayoutManager);
+        recycler.setAdapter(contactListAdapter);
+        contactListAdapter.notifyDataSetChanged();
         return rootView;
     }
 
@@ -97,9 +113,22 @@ public class ViewContactList extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onclick(View v) {
+
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public void setToolBar(){
+
+    }
+
+
+    public void setAdapterValues(){
+
     }
 }
