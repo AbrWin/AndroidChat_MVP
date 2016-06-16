@@ -1,11 +1,13 @@
 package com.abrsoftware.androidchat.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +73,8 @@ public class ViewContactList extends Fragment implements ContactListAdapter.onIt
         View rootView = inflater.inflate(R.layout.fragment_view_contact_list, container, false);
         presenter = new LoginPresenterImpl(loginPresenter);
         presenter.onCreate();
+        setToolBar(rootView);
+
         Contact contact = new Contact("abr999@hotmail.com","online","");
         List<Contact> contactList = new ArrayList<>();
         contactList.add(contact);
@@ -123,8 +127,10 @@ public class ViewContactList extends Fragment implements ContactListAdapter.onIt
         void onFragmentInteraction(Uri uri);
     }
 
-    public void setToolBar(){
-
+    public void setToolBar(View rootView){
+        Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setTitle(getString(R.string.toolbar_contactList));
     }
 
 
