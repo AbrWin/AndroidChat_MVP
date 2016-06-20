@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'myAndroidKey'
+            keyPassword 'hola2143'
+            storeFile file('/home/brown/Documentos/proyects-android/androidproyects.jks')
+            storePassword 'hola2143'
+        }
+    }
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
-
+    buildToolsVersion '23.0.3'
     defaultConfig {
         applicationId "com.abrsoftware.androidchat"
         minSdkVersion 16
@@ -15,6 +22,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            signingConfig signingConfigs.config
+        }
+        debug {
         }
     }
 }

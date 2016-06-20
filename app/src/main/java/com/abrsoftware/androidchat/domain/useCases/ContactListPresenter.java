@@ -6,7 +6,7 @@ package com.abrsoftware.androidchat.domain.useCases;
 public interface ContactListPresenter {
     void onCreate();
     void onDestroy();
-    void onResuome();
+    void onResume();
     void onPause();
 
     void signOff();

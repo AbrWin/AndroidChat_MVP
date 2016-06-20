@@ -7,5 +7,5 @@ public interface ContactListInteractor {
     void suscribe();
     void unsuscribe();
     void destroyLisener();
-    void removeContactEmail();
+    void removeContact(String mail);
 }

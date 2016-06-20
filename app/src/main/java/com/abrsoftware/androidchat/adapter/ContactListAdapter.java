@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.abrsoftware.androidchat.R;
-import com.abrsoftware.androidchat.entities.Contact;
+import com.abrsoftware.androidchat.entities.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
@@ -22,10 +22,10 @@ import java.util.List;
  */
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.MyHolder> {
     private View itemCardView;
-    private List<Contact> valuesContacts;
+    private List<User> valuesContacts;
     private onItemClickListenerItem listenerItem;
 
-    public ContactListAdapter(List<Contact> contacts, onItemClickListenerItem listenerItem) {
+    public ContactListAdapter(List<User> contacts, onItemClickListenerItem listenerItem) {
         valuesContacts = contacts;
         this.listenerItem = listenerItem;
     }
@@ -38,11 +38,16 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     @Override
     public void onBindViewHolder(final MyHolder holder, int position) {
+        boolean isOnline = valuesContacts.get(position).isOnline();
+        String status = isOnline ? "Online" : "Offline";
+        int color = isOnline ? holder.itemView.getResources().getColor(R.color.txt_color_online)
+                : holder.itemView.getResources().getColor(R.color.txt_color_offline);
         holder.contact = valuesContacts.get(position);
-        holder.contactUser.setText(valuesContacts.get(position).getMailContact());
-        holder.contactStatus.setText(valuesContacts.get(position).getStatusContact());
+        holder.contactUser.setText(valuesContacts.get(position).getMail());
+        holder.contactStatus.setTextColor(color);
+        holder.contactStatus.setText(status);
         Glide.with(holder.itemView.getContext())
-                .load(valuesContacts.get(position).getUrlContactImg())
+                .load("")
                 .asBitmap()
                 .placeholder(R.drawable.contact)
                 .into(new BitmapImageViewTarget(holder.contactImage) {
@@ -63,12 +68,12 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return 0;
     }
 
-    public class MyHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MyHolder extends RecyclerView.ViewHolder {
 
         private final ImageView contactImage;
         private final TextView contactUser;
         private final TextView contactStatus;
-        private Contact contact;
+        private User contact;
 
         public MyHolder(View itemView) {
             super(itemView);
@@ -76,17 +81,73 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             contactUser = (TextView) itemView.findViewById(R.id.contactEmail);
             contactStatus = (TextView) itemView.findViewById(R.id.contactStatus);
             itemCardView = itemView;
-            contactImage.setOnClickListener(this);
             contact = null;
         }
 
-        @Override
-        public void onClick(View v) {
-            listenerItem.onclick(v);
+        public void setOnclickListener(final User user, final onItemClickListenerItem listenerItem) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listenerItem.onItemclick(user);
+                }
+            });
+        }
+
+        public void setOnlongClickListener(final User user, final onItemClickListenerItem listenerItem) {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listenerItem.onItemlongClickListener(user);
+                    return false;
+                }
+            });
         }
     }
 
     public interface onItemClickListenerItem {
-        void onclick(View v);
+        void onItemclick(User user);
+
+        void onItemlongClickListener(User user);
+    }
+
+    public boolean alreadyInAdapter(User newUser) {
+        boolean alAlreadyInAdapter = false;
+        for (User user : this.valuesContacts) {
+            if (user.getMail().equals(newUser.getMail())) {
+                alAlreadyInAdapter = true;
+                break;
+            }
+        }
+        return alAlreadyInAdapter;
+    }
+
+    public void add(User user) {
+        if (!alreadyInAdapter(user)) {
+            this.valuesContacts.add(user);
+            this.notifyDataSetChanged();
+        }
+    }
+
+    public void update(User user) {
+        int pos = getPositionbyId(user.getMail());
+        valuesContacts.set(pos, user);
+        this.notifyDataSetChanged();
+    }
+
+    public void remove(User user) {
+        int pos = getPositionbyId(user.getMail());
+        valuesContacts.remove(pos);
+        this.notifyDataSetChanged();
+    }
+
+    public int getPositionbyId(String userName) {
+        int position = 0;
+        for (User user : valuesContacts) {
+            if (user.getMail().equals(userName)) {
+                break;
+            }
+            position++;
+        }
+        return position;
     }
 }

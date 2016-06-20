@@ -153,7 +153,7 @@ public class ViewLogin extends Fragment implements LoginView{
     @Override
     public void navigateToMainScreen() {
         //startActivity(new Intent(getActivity(), ContactListActivity.class));
-        ViewContactList contactList = new ViewContactList(this);
+        ViewContactList contactList = new ViewContactList();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(android.R.id.content, contactList);

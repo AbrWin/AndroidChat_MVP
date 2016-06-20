@@ -4,96 +4,86 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.abrsoftware.androidchat.R;
 import com.abrsoftware.androidchat.adapter.ContactListAdapter;
+import com.abrsoftware.androidchat.domain.implementation.ContactLictPresenterImpl;
 import com.abrsoftware.androidchat.domain.implementation.LoginPresenterImpl;
+import com.abrsoftware.androidchat.domain.useCases.ContactListPresenter;
+import com.abrsoftware.androidchat.domain.useCases.ContactListView;
 import com.abrsoftware.androidchat.domain.useCases.LoginView;
 import com.abrsoftware.androidchat.entities.Contact;
+import com.abrsoftware.androidchat.entities.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class ViewContactList extends Fragment implements ContactListAdapter.onItemClickListenerItem {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class ViewContactList extends Fragment implements ContactListAdapter.onItemClickListenerItem, ContactListView {
 
     private OnFragmentInteractionListener mListener;
     private LoginPresenterImpl presenter;
-    private LoginView loginPresenter;
+    private ContactListPresenter presenterContact;
     private RecyclerView recycler;
     private LinearLayoutManager linearLayoutManager;
 
-    public ViewContactList(LoginView view) {
-        this.loginPresenter = view;
-        // Required empty public constructor
-    }
+    //ButterKnife
+    @Bind(R.id.fabAdd)
+    public FloatingActionButton addContact;
+    private ContactListAdapter contactListAdapter;
+
 
     public ViewContactList() {
-        // Required empty public constructor
-    }
-
-
-    // TODO: Rename and change types and number of parameters
-    public static ViewContactList newInstance(String param1, String param2) {
-        ViewContactList fragment = new ViewContactList();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view_contact_list, container, false);
-        presenter = new LoginPresenterImpl(loginPresenter);
-        presenter.onCreate();
-        setToolBar(rootView);
+        ButterKnife.bind(this, rootView);
+        /*presenter = new LoginPresenterImpl(loginPresenter);
+        presenter.onCreate();*/
+        presenterContact = new ContactLictPresenterImpl(this);
+        presenterContact.onCreate();
+        String toolBarTitle = presenterContact.getCurrentUserMail().length() > 0 ? presenterContact.getCurrentUserMail(): getResources().getString(R.string.toolbar_contactList);
+        setToolBar(rootView,toolBarTitle);
+        setAdapterValues(rootView);
 
-        Contact contact = new Contact("abr999@hotmail.com","online","");
-        List<Contact> contactList = new ArrayList<>();
-        contactList.add(contact);
-        ContactListAdapter contactListAdapter = new ContactListAdapter(contactList,this);
-        recycler = (RecyclerView) rootView.findViewById(R.id.reciclador);
-        linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recycler.setLayoutManager(linearLayoutManager);
-        recycler.setAdapter(contactListAdapter);
-        contactListAdapter.notifyDataSetChanged();
         return rootView;
     }
 
     @Override
     public void onDestroyView() {
+        presenterContact.onDestroy();
         super.onDestroyView();
         presenter.onDestroy();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    @Override
+    public void onResume() {
+        presenterContact.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        presenterContact.onPause();
+        super.onPause();
+    }
+
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -117,24 +107,58 @@ public class ViewContactList extends Fragment implements ContactListAdapter.onIt
         mListener = null;
     }
 
+    @OnClick(R.id.fabAdd)
+    public void addContact(){
+        Log.d("msj","ViewContacList");
+    }
+
     @Override
-    public void onclick(View v) {
+    public void onContactAdded(User user) {
+        contactListAdapter.add(user);
+    }
+
+    @Override
+    public void onContactChanged(User user) {
+        contactListAdapter.update(user);
+    }
+
+    @Override
+    public void onContactDeleted(User user) {
+        contactListAdapter.remove(user);
+    }
+
+    @Override
+    public void onItemclick(User user) {
 
     }
+
+    @Override
+    public void onItemlongClickListener(User user) {
+
+    }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-    public void setToolBar(View rootView){
+    public void setToolBar(View rootView, String userMail){
         Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
-        toolbar.setTitle(getString(R.string.toolbar_contactList));
+        toolbar.setTitle(userMail);
     }
 
 
-    public void setAdapterValues(){
-
+    public void setAdapterValues(View rootView){
+        /*User user = new User("abr@7.com",true,"");
+        List<User> users = new ArrayList<>();
+        users.add(user);*/
+        contactListAdapter = new ContactListAdapter(new ArrayList<User>(),this);
+        recycler = (RecyclerView) rootView.findViewById(R.id.reciclador);
+        linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        recycler.setLayoutManager(linearLayoutManager);
+        recycler.setAdapter(contactListAdapter);
+        contactListAdapter.notifyDataSetChanged();
     }
 }

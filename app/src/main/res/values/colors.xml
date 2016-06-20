@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="back.contact.list">#D8D8D8</color>
-    <color name="status.color">#F95F5F</color>
+    <color name="txt.color.offline">#F95F5F</color>
+    <color name="txt.color.online">#04B45F</color>
 </resources>

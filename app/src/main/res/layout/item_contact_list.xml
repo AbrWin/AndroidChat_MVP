@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/contactEmail"
             android:layout_below="@+id/contactEmail"
-            android:textColor="@color/status.color"
             android:text="Status"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
