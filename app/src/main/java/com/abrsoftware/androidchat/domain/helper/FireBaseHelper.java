@@ -51,7 +51,7 @@ public class FireBaseHelper {
         Firebase userReference = null;
         if(mail != null){
             String keyMail = mail.replace(".", "_");
-            userReference = dataReference.getRoot().child(USERS_PATH).child(keyMail);
+            userReference = dataReference.getRoot().child(USERS_PATH).child(keyMail).child(CONTACTS_PATH);
         }
         return userReference;
     }
