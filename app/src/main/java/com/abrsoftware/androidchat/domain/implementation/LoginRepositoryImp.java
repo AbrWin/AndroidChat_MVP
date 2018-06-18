@@ -39,6 +39,8 @@ public class LoginRepositoryImp implements LoginRepository {
             @Override
             public void onSuccess(Map<String, Object> stringObjectMap) {
                 postEvent(LoginEvent.onSignUpSuccess);
+
+
                 signIn(mail, password);
             }
 
