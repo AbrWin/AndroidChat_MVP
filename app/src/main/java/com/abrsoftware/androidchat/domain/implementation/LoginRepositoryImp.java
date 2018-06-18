@@ -92,6 +92,8 @@ public class LoginRepositoryImp implements LoginRepository {
                         currenUser = new User();
                         currenUser.setMail(mail);
                         myUserReference.setValue(currenUser);
+
+
                     }
                 }
                 helper.changeUserStatusConnection(User.ONLINE);
