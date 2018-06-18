@@ -64,8 +64,6 @@ public class LoginRepositoryImp implements LoginRepository {
             @Override
             public void onAuthenticationError(FirebaseError firebaseError) {
                 postEvent(LoginEvent.onSignUpError, firebaseError.getMessage());
-
-
             }
         });
         //
